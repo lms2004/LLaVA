@@ -4,7 +4,7 @@ from typing import List, Tuple
 import base64
 from io import BytesIO
 from PIL import Image
-
+from pydantic import ConfigDict  # 新增导入
 
 class SeparatorStyle(Enum):
     """Different separator style."""
@@ -28,7 +28,9 @@ class Conversation:
     version: str = "Unknown"
 
     skip_next: bool = False
-
+    # ============ 关键修复：添加以下配置 ============
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    # =============================================
     def get_prompt(self):
         messages = self.messages
         if len(messages) > 0 and type(messages[0][1]) is tuple:

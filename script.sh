@@ -36,17 +36,23 @@ pip install "sglang[all]"
 pip install protobuf==3.19.5
 pip install --upgrade accelerate
 
+python -m llava.serve.cli \
+    --model-path ./models/liuhaotian/llava-v1.5-7b \
+    --image-file "https://llava-vl.github.io/static/images/view.jpg" \
+    --load-4bit
+
 # 运行
 python -m llava.serve.controller --host 0.0.0.0 --port 10000
 
 python -m llava.serve.gradio_web_server --controller http://localhost:10000 --model-list-mode reload
 
 
-# 双卡
+# Launch a SGLang worker 
+# server (1)双卡
 CUDA_VISIBLE_DEVICES=0,1 python3 -m sglang.launch_server --model-path ./models/liuhaotian/llava-v1.5-7b --tokenizer-path ./models/llava-hf/llava-1.5-7b-hf --port 30000 --tp 2
 
-# llava 的 worker
+# LLaVA-SGLang worker that will communicate between LLaVA controller and SGLang backend
 python -m llava.serve.sglang_worker --host 0.0.0.0 --controller http://localhost:10000 --port 40000 --worker http://localhost:40000 --sgl-endpoint http://127.0.0.1:30000
 
-# 实际推理的worker
+Launch a model worker
 python -m llava.serve.model_worker --host 0.0.0.0 --controller http://localhost:10000 --port 40000 --worker http://localhost:40000 --model-path /hy-tmp/models/liuhaotian/llava-v1.5-7b
