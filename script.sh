@@ -38,7 +38,7 @@ pip install --upgrade accelerate
 pip install fastapi==0.111.0
 
 # TypeError: LlavaLlamaForCausalLM.forward() got an unexpected keyword argument 'cache_position'
-pip install transformers==4.37.2
+pip install transformers==4.37.2 # sglang 可能冲突
 
 
 
@@ -66,7 +66,7 @@ python ./LLaVA/llava/eval/run_llava.py --model-path /hy-tmp/models/liuhaotian/ll
 #           ↓
 #         SGLang Backend: llava-v1.6-34b (sglang server)
 
-# 参考： https://zhuanlan.zhihu.com/p/696406884
+# 参考： https://zhuanlan.zhihu.com/p/696406884 (前三， 不使用 sglang )
 # Gradio (UI Server)
 python -m llava.serve.gradio_web_server --controller http://localhost:10000 --model-list-mode reload
 
@@ -78,9 +78,9 @@ python -m llava.serve.model_worker --host 0.0.0.0 --controller http://localhost:
 
 
 # # LLaVA-SGLang worker that will communicate between LLaVA controller and SGLang backend
-# python -m llava.serve.sglang_worker --host 0.0.0.0 --controller http://localhost:10000 --port 40000 --worker http://localhost:40000 --sgl-endpoint http://127.0.0.1:30000
+python -m llava.serve.sglang_worker --host 0.0.0.0 --controller http://localhost:10000 --port 40000 --worker http://localhost:40000 --sgl-endpoint http://127.0.0.1:30000
 
 # # SGLang Backend (双卡)
-# CUDA_VISIBLE_DEVICES=0,1 python3 -m sglang.launch_server --model-path /hy-tmp/models/liuhaotian/llava-v1.5-7b --tokenizer-path ./models/llava-hf/llava-1.5-7b-hf --port 30000 --tp 2
+CUDA_VISIBLE_DEVICES=0,1 python3 -m sglang.launch_server --model-path /hy-tmp/models/liuhaotian/llava-v1.5-7b --tokenizer-path ./models/llava-hf/llava-1.5-7b-hf --port 30000 --tp 2
 
  
