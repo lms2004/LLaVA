@@ -30,6 +30,11 @@ pip install --upgrade pip  # enable PEP 660 support
 pip install -e .
 pip install gradio
 pip install "sglang[all]"
+# installation page of its repo: https://github.com/protocolbuffers/protobuf/tree/master/python#installation and follow the ones
+# 1. Downgrade the protobuf package to 3.20.x or lower.
+# 2. Set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python (but this will use pure-Python parsing and will be much slower).
+pip install protobuf==3.19.5
+pip install --upgrade accelerate
 
 # 运行
 python -m llava.serve.controller --host 0.0.0.0 --port 10000
@@ -44,4 +49,4 @@ CUDA_VISIBLE_DEVICES=0,1 python3 -m sglang.launch_server --model-path ./models/l
 python -m llava.serve.sglang_worker --host 0.0.0.0 --controller http://localhost:10000 --port 40000 --worker http://localhost:40000 --sgl-endpoint http://127.0.0.1:30000
 
 # 实际推理的worker
-python -m llava.serve.model_worker --host 0.0.0.0 --controller http://localhost:10000 --port 40000 --worker http://localhost:40000 --model-path ./models/liuhaotian/llava-v1.5-7b
+python -m llava.serve.model_worker --host 0.0.0.0 --controller http://localhost:10000 --port 40000 --worker http://localhost:40000 --model-path /hy-tmp/models/liuhaotian/llava-v1.5-7b

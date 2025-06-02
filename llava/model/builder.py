@@ -113,6 +113,21 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
                     **kwargs
                 )
             else:
+                # https://huggingface.co/transformers/v3.0.2/model_doc/auto.html#autotokenizer
+                """
+                AutoTokenizer:
+                    ​​通用分词器类​​，用于自动加载与预训练模型匹配的分词器（如 BERT、GPT、RoBERTa 等）。
+                    它通过模型名称或路径动态选择正确的分词器实现
+                    tokenizer = AutoTokenizer.from_pretrained(
+                        pretrained_model_name_or_path,  # 模型标识/本地路径 （考虑路径错误）
+                        cache_dir=None,                 # 自定义缓存目录
+                        force_download=False,           # 强制重新下载
+                        resume_download=False,          # 断点续传
+                        proxies=None,                   # 代理设置
+                        use_fast=False,                 # 启用快速分词器（推荐）
+                        **kwargs                        # 其他配置（如特殊标记）
+                    )
+                """
                 tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=False)
                 model = LlavaLlamaForCausalLM.from_pretrained(
                     model_path,
