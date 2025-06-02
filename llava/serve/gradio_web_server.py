@@ -152,6 +152,7 @@ def add_text(state, text, image, image_process_mode, request: gr.Request):
 
 
 def http_bot(state, model_selector, temperature, top_p, max_new_tokens, request: gr.Request):
+    output = None  # 初始化变量 -> UnboundLocalError: local variable 'output' referenced before assignment
     logger.info(f"http_bot. ip: {request.client.host}")
     start_tstamp = time.time()
     model_name = model_selector
