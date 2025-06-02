@@ -35,24 +35,42 @@ pip install "sglang[all]"
 # 2. Set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python (but this will use pure-Python parsing and will be much slower).
 pip install protobuf==3.19.5
 pip install --upgrade accelerate
+pip install fastapi==0.111.0
 
-python -m llava.serve.cli \
-    --model-path ./models/liuhaotian/llava-v1.5-7b \
-    --image-file "https://llava-vl.github.io/static/images/view.jpg" \
-    --load-4bit
 
-# 运行
-python -m llava.serve.controller --host 0.0.0.0 --port 10000
+# 没跑通
+# python -m llava.serve.cli \
+#     --model-path ./models/liuhaotian/llava-v1.5-7b \
+#     --image-file "https://llava-vl.github.io/static/images/view.jpg" \
+#     --load-4bit
 
+
+# Gradio (UI Server)
+#   │
+#   ↓
+# Controller (API Server:10000)
+#   │
+#   ├──> Model Worker: llava-v1.5-7b (PORT:40000)
+#   │
+#   ├──> Model Worker: llava-v1.5-13b (PORT:40001)
+#   │
+#   └──> SGLang Worker: llava-v1.6-34b (PORT:40002)
+#           │
+#           ↓
+#         SGLang Backend: llava-v1.6-34b (sglang server)
+
+# Gradio (UI Server)
 python -m llava.serve.gradio_web_server --controller http://localhost:10000 --model-list-mode reload
 
-
-# Launch a SGLang worker 
-# server (1)双卡
-CUDA_VISIBLE_DEVICES=0,1 python3 -m sglang.launch_server --model-path ./models/liuhaotian/llava-v1.5-7b --tokenizer-path ./models/llava-hf/llava-1.5-7b-hf --port 30000 --tp 2
+# Controller
+python -m llava.serve.controller --host 0.0.0.0 --port 10000
 
 # LLaVA-SGLang worker that will communicate between LLaVA controller and SGLang backend
 python -m llava.serve.sglang_worker --host 0.0.0.0 --controller http://localhost:10000 --port 40000 --worker http://localhost:40000 --sgl-endpoint http://127.0.0.1:30000
 
-Launch a model worker
+# SGLang Backend (双卡)
+CUDA_VISIBLE_DEVICES=0,1 python3 -m sglang.launch_server --model-path ./models/liuhaotian/llava-v1.5-7b --tokenizer-path ./models/llava-hf/llava-1.5-7b-hf --port 30000 --tp 2
+
+
+# Launch a model worker
 python -m llava.serve.model_worker --host 0.0.0.0 --controller http://localhost:10000 --port 40000 --worker http://localhost:40000 --model-path /hy-tmp/models/liuhaotian/llava-v1.5-7b
