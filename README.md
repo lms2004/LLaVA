@@ -202,7 +202,7 @@ python -m llava.serve.gradio_web_server --controller http://localhost:10000 --mo
 ```
 You just launched the Gradio web interface. Now, you can open the web interface with the URL printed on the screen. You may notice that there is no model in the model list. Do not worry, as we have not launched any model worker yet. It will be automatically updated when you launch a model worker.
 
-#### Launch a SGLang worker
+#### Launch a SGLang worker (不要在虚拟环境下安装， 依赖冲突)
 
 This is the recommended way to serve LLaVA model with high throughput, and you need to install SGLang first. Note that currently `4-bit` quantization is not supported yet on SGLang-LLaVA, and if you have limited GPU VRAM, please check out model worker with [quantization](https://github.com/haotian-liu/LLaVA?tab=readme-ov-file#launch-a-model-worker-4-bit-8-bit-inference-quantized).
 

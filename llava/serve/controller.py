@@ -28,7 +28,14 @@ logger = build_logger("controller", "controller.log")
 class DispatchMethod(Enum):
     LOTTERY = auto()
     SHORTEST_QUEUE = auto()
-
+    """
+    @classmethod
+        方法类型    装饰器       首参数  访问类属性  访问实例属性  典型用途
+        实例方法    无          self   ✅         ✅           操作实例数据
+        类方法    @classmethod  cls    ✅         ❌           工厂方法，操作类属性
+        静态方法  @staticmethod 无     ❌         ❌           独立工具函数
+    """
+    
     @classmethod
     def from_str(cls, name):
         if name == "lottery":

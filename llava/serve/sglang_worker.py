@@ -43,6 +43,12 @@ def heart_beat_worker(controller):
 
 @sgl.function
 def pipeline(s, prompt, max_tokens):
+    """
+        prompt: str or list of str or list of images
+        功能：
+            1. 将字符串或图像列表转换为SGLang格式的prompt
+            2. 生成响应文本
+    """
     for p in prompt:
         if type(p) is str:
             s += p
@@ -59,6 +65,11 @@ class ModelWorker:
         self.worker_id = worker_id
 
         # Select backend
+        """
+        RuntimeEndpoint -> 服务端点的网络地址标识
+        示例：
+            set_default_backend(RuntimeEndpoint(f"http://localhost:{port}"))
+        """
         backend = RuntimeEndpoint(sgl_endpoint)
         sgl.set_default_backend(backend)
         model_path = backend.model_info["model_path"]
