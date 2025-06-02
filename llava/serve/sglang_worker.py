@@ -23,7 +23,7 @@ from llava.mm_utils import process_images, load_image_from_base64, tokenizer_ima
 from llava.constants import DEFAULT_IMAGE_TOKEN
 
 import sglang as sgl
-from sglang.backend.runtime_endpoint import RuntimeEndpoint
+from sglang import RuntimeEndpoint, set_default_backend
 
 
 GB = 1 << 30

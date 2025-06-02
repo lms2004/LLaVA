@@ -2,11 +2,14 @@ cd /hy-tmp
 
 echo "配置 Hugging Face cli"
 pip install -U "huggingface_hub[cli]"
+
+# vim ~/.profile
 export HF_ENDPOINT=https://hf-mirror.com
 
 
 # https://huggingface.co/llava-hf/llava-1.5-7b-hf/tree/main
 # https://huggingface.co/liuhaotian/llava-v1.5-7b
+# 默认下载：~/.cache/huggingface/hub/
 echo "下载模型.."
 echo "llava-v1.5-7b 下载中"
 huggingface-cli download --resume-download liuhaotian/llava-v1.5-7b --local-dir ./models/liuhaotian/llava-v1.5-7b
@@ -16,6 +19,7 @@ echo "llava-hf/llava-1.5-7b-hf 分词器下载中"
 huggingface-cli download --resume-download llava-hf/llava-1.5-7b-hf --local-dir ./models/llava-hf/llava-1.5-7b-hf
 echo "llava-hf/llava-1.5-7b-hf 分词器下载完成"
 
+huggingface-cli download --resume-download openai/clip-vit-large-patch14-336 --local-dir ./models/openai/clip-vit-large-patch14-336
 
 # python 环境
 
